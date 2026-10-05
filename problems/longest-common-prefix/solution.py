@@ -1,14 +1,17 @@
 class Solution:
-    def longestCommonPrefix(self, strs: list[str]) -> str:
-        if not strs:
-            return ""
-        
-        prefix = strs[0]
-        
-        for s in strs[1:]:
-            while not s.startswith(prefix):
-                prefix = prefix[:-1]
-                if not prefix:
-                    return ""
-        
-        return prefix  # Ensure this return statement is outside the loop
+
+  def longestCommonPrefix(self, strs: list[str]) -> str:
+    if not strs:
+      return ""
+
+    # Start with the first string as the initial candidate
+    prefix = strs[0]
+
+    for s in strs[1:]:
+      # Shorten the prefix until s starts with it
+      while not s.startswith(prefix):
+        prefix = prefix[:-1]
+        if not prefix:
+          return ""
+
+    return prefix
