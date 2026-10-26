@@ -1,1 +1,23 @@
+name: LeetCode to X
 
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'problems/**'
+
+permissions:
+  contents: read
+
+jobs:
+  detect-solution:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect new solution
+        run: |
+          echo "A LeetCode solution was pushed!"
+          git log -1 --pretty=format:"%s"
