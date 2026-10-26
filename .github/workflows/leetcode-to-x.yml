@@ -1,27 +1,36 @@
 
-name: LeetCode to X
+name: LeetCode Progress Tracker
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
       - "problems/**"
+  schedule:
+    - cron: "30 18 * * *"
+  workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  detect-solution:
+  update-progress:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
-      - name: Detect new solution
+      - name: Update activity log
         run: |
-          echo "A LeetCode solution was pushed!"
-          git diff --name-only HEAD^ HEAD
-          git log -1 --pretty=format:"%s"
+          mkdir -p stats
+          DATE=$(date -u +%F)
+          echo "$DATE" >> stats/activity.txt
+          sort -u stats/activity.txt -o stats/activity.txt
+
+      - name: Commit progress
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add stats/activity.txt
+          git diff --cached --quiet || git commit -m "Update coding activity"
+          git push
