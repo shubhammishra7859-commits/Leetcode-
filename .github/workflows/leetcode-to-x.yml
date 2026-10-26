@@ -1,3 +1,4 @@
+
 name: LeetCode to X
 
 on:
@@ -16,8 +17,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Detect new solution
         run: |
           echo "A LeetCode solution was pushed!"
+          git diff --name-only HEAD^ HEAD
           git log -1 --pretty=format:"%s"
